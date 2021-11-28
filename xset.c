@@ -1451,7 +1451,7 @@ query(Display *dpy)
 	BOOL onoff;
 	CARD16 state;
 
-	printf("DPMS (Energy Star):\n");
+	printf("DPMS (Display Power Management Signaling):\n");
 	if (DPMSQueryExtension(dpy, &dummy, &dummy)) {
 	    if (DPMSCapable(dpy)) {
 		DPMSGetTimeouts(dpy, &standby, &suspend, &off);
@@ -1604,9 +1604,9 @@ usage(const char *fmt, ...)
             "    To set keyclick volume:\n"
             "\t c [0-100]        c on\n"
 #ifdef DPMSExtension
-            "    To control Energy Star (DPMS) features:\n"
-            "\t-dpms      Energy Star features off\n"
-            "\t+dpms      Energy Star features on\n"
+            "    To control Display Power Management Signaling (DPMS) features:\n"
+            "\t-dpms      DPMS features off\n"
+            "\t+dpms      DPMS features on\n"
             "\t dpms [standby [suspend [off]]]     \n"
             "\t      force standby \n"
             "\t      force suspend \n"
