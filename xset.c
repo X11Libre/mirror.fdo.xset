@@ -152,15 +152,6 @@ int
 main(int argc, char *argv[])
 {
     const char *arg;
-    register int i;
-    int percent;
-    int acc_num, acc_denom, threshold;
-
-#ifdef DPMSExtension
-    CARD16 standby_timeout, suspend_timeout, off_timeout;
-#endif
-    int key, auto_repeat_mode;
-    XKeyboardControl values;
 
 #define MAX_PIXEL_COUNT 512
     unsigned long pixels[MAX_PIXEL_COUNT];
@@ -170,20 +161,8 @@ main(int argc, char *argv[])
     Display *dpy;
     Bool hasargs = False;
 
-    int miscpresent = 0;
-    int xkbpresent = 0;
-
-#ifdef XKB
-    int xkbmajor = XkbMajorVersion, xkbminor = XkbMinorVersion;
-    int xkbopcode, xkbevent, xkberror;
-#else
-#endif
-#ifdef FONTCACHE
-    long himark, lowmark, balance;
-#endif
-
     progName = argv[0];
-    for (i = 1; i < argc; i++) {
+    for (int i = 1; i < argc; i++) {
 	arg = argv[i];
 	if (strcmp(arg, "-display") == 0 || strcmp(arg, "-d") == 0) {
 	    if (++i >= argc)
@@ -207,7 +186,7 @@ main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
     }
     XSetErrorHandler(local_xerror);
-    for (i = 1; i < argc;) {
+    for (int i = 1; i < argc;) {
 	arg = argv[i++];
 	if (strcmp(arg, "-display") == 0 || strcmp(arg, "-d") == 0) {
 	    ++i;		       		/* already dealt with */
@@ -217,7 +196,7 @@ main(int argc, char *argv[])
 	    set_click(dpy, 0);	       		/* If so, turn click off */
 	} else if (*arg == 'c') {      		/* Well, does it start
 						   with "c", then? */
-	    percent = SERVER_DEFAULT;  		/* Default click volume. */
+	    int percent = SERVER_DEFAULT; 	/* Default click volume. */
 	    if (i >= argc) {
 		set_click(dpy, percent);	/* set click to default */
 		break;
@@ -237,7 +216,7 @@ main(int argc, char *argv[])
 	} else if (strcmp(arg, "-b") == 0) {
 	    set_bell_vol(dpy, 0);      		/* Then turn off bell.    */
 	} else if (strcmp(arg, "b") == 0) {
-	    percent = SERVER_DEFAULT;  		/* Set bell to default. */
+	    int percent = SERVER_DEFAULT;  	/* Set bell to default. */
 	    if (i >= argc) {
 		set_bell_vol(dpy, percent);	/* set bell to default */
 		set_bell_pitch(dpy, percent);	/* set pitch to default */
@@ -298,6 +277,8 @@ main(int argc, char *argv[])
 	    FontCacheSettings cs;
 
 	    if (FontCacheQueryExtension(dpy, &dummy, &dummy)) {
+		long himark, lowmark, balance;
+
 		FontCacheGetCacheSettings(dpy, &cs);
 		himark = cs.himark / 1024;
 		lowmark = cs.lowmark / 1024;
@@ -396,6 +377,8 @@ main(int argc, char *argv[])
 	    set_font_path(dpy, arg, 0, 0, -1);	/* not special, postremove */
 	    i++;
 	} else if (strcmp(arg, "-led") == 0) {	/* Turn off one or all LEDs */
+	    XKeyboardControl values;
+
 	    values.led_mode = OFF;
 	    values.led = ALL;	       		/* None specified */
 	    if (i >= argc) {
@@ -418,6 +401,8 @@ main(int argc, char *argv[])
 	    }
 	    set_led(dpy, values.led, values.led_mode);
 	} else if (strcmp(arg, "led") == 0) {	/* Turn on one or all LEDs  */
+	    XKeyboardControl values;
+
 	    values.led_mode = ON;
 	    values.led = ALL;
 	    if (i >= argc) {
@@ -448,9 +433,10 @@ main(int argc, char *argv[])
 	}
 /*  Set pointer (mouse) settings:  Acceleration and Threshold. */
 	else if (strcmp(arg, "m") == 0 || strcmp(arg, "mouse") == 0) {
-	    acc_num = SERVER_DEFAULT;		/* restore server defaults */
-	    acc_denom = SERVER_DEFAULT;
-	    threshold = SERVER_DEFAULT;
+	    int acc_num = SERVER_DEFAULT;	/* restore server defaults */
+	    int acc_denom = SERVER_DEFAULT;
+	    int threshold = SERVER_DEFAULT;
+
 	    if (i >= argc) {
 		set_mouse(dpy, acc_num, acc_denom, threshold);
 		break;
@@ -496,6 +482,8 @@ main(int argc, char *argv[])
 	    int dummy;
 
 	    if (DPMSQueryExtension(dpy, &dummy, &dummy)) {
+		CARD16 standby_timeout, suspend_timeout, off_timeout;
+
 		DPMSGetTimeouts(dpy, &standby_timeout, &suspend_timeout,
 		    &off_timeout);
 		if (i >= argc) {
@@ -648,8 +636,9 @@ main(int argc, char *argv[])
 	    }
 	} else if (strcmp(arg, "-r") == 0) {		/* Turn off one or
 							   all autorepeats */
-	    auto_repeat_mode = OFF;
-	    key = ALL;		       			/* None specified */
+	    int auto_repeat_mode = OFF;
+	    int key = ALL;	       			/* None specified */
+
 	    arg = argv[i];
 	    if (i < argc)
 		if (is_number(arg, 255)) {
@@ -659,8 +648,9 @@ main(int argc, char *argv[])
 	    set_repeat(dpy, key, auto_repeat_mode);
 	} else if (strcmp(arg, "r") == 0) {		/* Turn on one or
 							   all autorepeats */
-	    auto_repeat_mode = ON;
-	    key = ALL;		       			/* None specified */
+	    int auto_repeat_mode = ON;
+	    int key = ALL;	       			/* None specified */
+
 	    arg = argv[i];
 	    if (i < argc) {
 		if (strcmp(arg, "on") == 0) {
@@ -673,12 +663,16 @@ main(int argc, char *argv[])
 #if defined(XF86MISC) || defined(XKB)
 		else if (strcmp(arg, "rate") == 0) {	/*  ...or this one. */
 		    int delay = 0, rate = 0;
+		    int miscpresent = 0;
+		    int xkbpresent = 0;
 
 #ifdef XF86MISC
 		    int rate_set = 0;
 #endif
-
 #ifdef XKB
+		    int xkbmajor = XkbMajorVersion, xkbminor = XkbMinorVersion;
+		    int xkbopcode, xkbevent, xkberror;
+
 		    if (XkbQueryExtension(dpy, &xkbopcode, &xkbevent,
 					  &xkberror, &xkbmajor, &xkbminor)) {
 			delay = XKBDDELAY_DEFAULT;
@@ -787,13 +781,14 @@ static void
 set_click(Display *dpy, int percent)
 {
     XKeyboardControl values;
-    XKeyboardState kbstate;
 
     values.key_click_percent = percent;
     if (percent == DEFAULT_ON)
 	values.key_click_percent = SERVER_DEFAULT;
     XChangeKeyboardControl(dpy, KBKeyClickPercent, &values);
     if (percent == DEFAULT_ON) {
+	XKeyboardState kbstate;
+
 	XGetKeyboardControl(dpy, &kbstate);
 	if (!kbstate.key_click_percent) {
 	    values.key_click_percent = -percent;
@@ -807,13 +802,14 @@ static void
 set_bell_vol(Display *dpy, int percent)
 {
     XKeyboardControl values;
-    XKeyboardState kbstate;
 
     values.bell_percent = percent;
     if (percent == DEFAULT_ON)
 	values.bell_percent = SERVER_DEFAULT;
     XChangeKeyboardControl(dpy, KBBellPercent, &values);
     if (percent == DEFAULT_ON) {
+	XKeyboardState kbstate;
+
 	XGetKeyboardControl(dpy, &kbstate);
 	if (!kbstate.bell_percent) {
 	    values.bell_percent = -percent;
@@ -1024,11 +1020,11 @@ xkbset_led(Display *dpy, const char *led, int led_mode)
 #else
     int xkbmajor = XkbMajorVersion, xkbminor = XkbMinorVersion;
     int xkbopcode, xkbevent, xkberror;
-    Atom ledatom;
 
     if (XkbQueryExtension(dpy, &xkbopcode, &xkbevent, &xkberror,
 			  &xkbmajor, &xkbminor)) {
-	ledatom = XInternAtom(dpy, led, True);
+	Atom ledatom = XInternAtom(dpy, led, True);
+
 	if ((ledatom != None) &&
 	    XkbGetNamedIndicator(dpy, ledatom, NULL, NULL, NULL, NULL)) {
 	    if (XkbSetNamedIndicator(dpy, ledatom, True,
@@ -1153,7 +1149,6 @@ set_pixels(Display *dpy, unsigned long *pixels, caddr_t * colors,
     XVisualInfo viproto, *vip;
     int nvisuals = 0;
     const char *visual_type = NULL;
-    int i;
 
     viproto.visualid = XVisualIDFromVisual(visual);
     vip = XGetVisualInfo(dpy, VisualIDMask, &viproto, &nvisuals);
@@ -1190,7 +1185,7 @@ set_pixels(Display *dpy, unsigned long *pixels, caddr_t * colors,
 		"%s:  cannot set pixel values in read-only %s visuals\n",
 		progName, visual_type);
     } else {
-	for (i = 0; i < numpixels; i++) {
+	for (int i = 0; i < numpixels; i++) {
 	    def.pixel = pixels[i];
 	    if (def.pixel >= max_cells)
 		fprintf(stderr,
@@ -1272,9 +1267,6 @@ query(Display *dpy)
     int acc_num, acc_denom, threshold;
     int timeout, interval, prefer_blank, allow_exp;
 
-#ifdef XF86MISC
-    XF86MiscKbdSettings kbdinfo;
-#endif
 #ifdef XKB
     XkbDescPtr xkb;
     int xkbmajor = XkbMajorVersion, xkbminor = XkbMinorVersion;
@@ -1307,8 +1299,6 @@ query(Display *dpy)
 	    int inds[XkbNumIndicators];
 	    int activecount = 0;
 	    int maxnamelen = 0;
-	    int columnwidth;
-	    int linewidth;
 
 	    printf("  XKB indicators:\n");
 
@@ -1336,6 +1326,8 @@ query(Display *dpy)
 	    if (activecount == 0) {
 		printf("    None\n");
 	    } else {
+		int columnwidth;
+		int linewidth;
 
 #define XKB_IND_FORMAT_CHARS 13 /* size of other chars in '    DD: X: off' */
 #define MAX_LINE_WIDTH	     76
@@ -1384,6 +1376,7 @@ query(Display *dpy)
 #ifdef XF86MISC
     {
 	int dummy;
+	XF86MiscKbdSettings kbdinfo;
 
 	if (XF86MiscQueryExtension(dpy, &dummy, &dummy) &&
 	    XF86MiscGetKbdSettings(dpy, &kbdinfo))
@@ -1488,15 +1481,16 @@ query(Display *dpy)
 #ifdef FONTCACHE
     {
 	int dummy;
-	FontCacheSettings cs;
-	int himark, lowmark, balance;
 
 	printf("Font cache:\n");
 	if (FontCacheQueryExtension(dpy, &dummy, &dummy)) {
+            FontCacheSettings cs;
+
 	    if (FontCacheGetCacheSettings(dpy, &cs)) {
-		himark = cs.himark / 1024;
-		lowmark = cs.lowmark / 1024;
-		balance = cs.balance;
+		int himark = cs.himark / 1024;
+		int lowmark = cs.lowmark / 1024;
+		int balance = cs.balance;
+
 		printf("  hi-mark (KB): %d  low-mark (KB): %d  balance (%%): %d\n",
 		       himark, lowmark, balance);
 	    }
@@ -1537,16 +1531,17 @@ static void
 query_cache_status(Display *dpy)
 {
     int dummy;
-    FontCacheSettings cs;
-    FontCacheStatistics cstats;
-    int himark, lowmark, balance;
 
     if (FontCacheQueryExtension(dpy, &dummy, &dummy)) {
+	FontCacheSettings cs;
+	FontCacheStatistics cstats;
+
 	if (FontCacheGetCacheSettings(dpy, &cs)) {
+	    int himark = cs.himark / 1024;
+	    int lowmark = cs.lowmark / 1024;
+	    int balance = cs.balance;
+
 	    printf("font cache settings:\n");
-	    himark = cs.himark / 1024;
-	    lowmark = cs.lowmark / 1024;
-	    balance = cs.balance;
 	    printf("  hi-mark (KB): %d  low-mark (KB): %d  balance (%%): %d\n",
 		   himark, lowmark, balance);
 	}
