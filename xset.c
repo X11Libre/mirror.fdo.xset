@@ -905,7 +905,7 @@ set_font_path(Display *dpy, const char *path, int special, int before, int after
 	}
     }
 
-    directoryList = (char **)malloc(ndirs * sizeof(char *));
+    directoryList = malloc(ndirs * sizeof(char *));
     if (!directoryList)
 	error("out of memory for font path directory list");
 
@@ -942,31 +942,28 @@ set_font_path(Display *dpy, const char *path, int special, int before, int after
     /* if adding to list, build a superset */
     if (before > 0 || after > 0) {
 	unsigned int nnew = ndirs + ncurrent;
-	char **newList = (char **)malloc(nnew * sizeof(char *));
+	char **newList = malloc(nnew * sizeof(char *));
 
 	if (!newList)
 	    error("out of memory");
 	if (before > 0) {	       /* new + current */
-	    memmove((char *)newList, (char *)directoryList,
-                    (ndirs * sizeof(char *)));
-	    memmove((char *)(newList + ndirs), (char *)currentList,
-		    (ncurrent * sizeof(char *)));
+	    memmove(newList, directoryList, (ndirs * sizeof(char *)));
+	    memmove((newList + ndirs), currentList, (ncurrent * sizeof(char *)));
 	    XSetFontPath(dpy, newList, (int) nnew);
 	} else if (after > 0) {
-	    memmove((char *)newList, (char *)currentList,
-		    (ncurrent * sizeof(char *)));
-	    memmove((char *)(newList + ncurrent), (char *)directoryList,
+	    memmove(newList, currentList, (ncurrent * sizeof(char *)));
+	    memmove((newList + ncurrent), directoryList,
 		    (ndirs * sizeof(char *)));
 	    XSetFontPath(dpy, newList,(int) nnew);
 	}
-	free((char *)newList);
+	free(newList);
     }
 
     /* if deleting from list, build one the same size */
     if (before < 0 || after < 0) {
 	unsigned int i, j;
 	unsigned int nnew = 0;
-	char **newList = (char **)malloc(ncurrent * sizeof(char *));
+	char **newList = malloc(ncurrent * sizeof(char *));
 
 	if (!newList)
 	    error("out of memory");
@@ -985,12 +982,12 @@ set_font_path(Display *dpy, const char *path, int special, int before, int after
 		    progName);
 	}
 	XSetFontPath(dpy, newList, (int) nnew);
-	free((char *)newList);
+	free(newList);
     }
 
     free(directories);
     if (directoryList)
-	free((char *)directoryList);
+	free(directoryList);
     if (currentList)
 	XFreeFontPath(currentList);
 
@@ -1201,7 +1198,7 @@ set_pixels(Display *dpy, unsigned long *pixels, caddr_t * colors,
 	}
     }
 
-    XFree((char *)vip);
+    XFree(vip);
 
     return;
 }
