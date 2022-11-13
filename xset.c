@@ -377,10 +377,11 @@ main(int argc, char *argv[])
 	    set_font_path(dpy, arg, 0, 0, -1);	/* not special, postremove */
 	    i++;
 	} else if (strcmp(arg, "-led") == 0) {	/* Turn off one or all LEDs */
-	    XKeyboardControl values;
+	    XKeyboardControl values = {
+		.led_mode = OFF,
+		.led = ALL	       		/* None specified */
+	    };
 
-	    values.led_mode = OFF;
-	    values.led = ALL;	       		/* None specified */
 	    if (i >= argc) {
 		set_led(dpy, values.led, values.led_mode);
 		break;
@@ -401,10 +402,11 @@ main(int argc, char *argv[])
 	    }
 	    set_led(dpy, values.led, values.led_mode);
 	} else if (strcmp(arg, "led") == 0) {	/* Turn on one or all LEDs  */
-	    XKeyboardControl values;
+	    XKeyboardControl values = {
+		.led_mode = ON,
+		.led = ALL
+	    };
 
-	    values.led_mode = ON;
-	    values.led = ALL;
 	    if (i >= argc) {
 		set_led(dpy, values.led,
 			values.led_mode);	/* set led to def */
@@ -780,9 +782,8 @@ is_number(const char *arg, int maximum)
 static void
 set_click(Display *dpy, int percent)
 {
-    XKeyboardControl values;
+    XKeyboardControl values = { .key_click_percent = percent };
 
-    values.key_click_percent = percent;
     if (percent == DEFAULT_ON)
 	values.key_click_percent = SERVER_DEFAULT;
     XChangeKeyboardControl(dpy, KBKeyClickPercent, &values);
@@ -801,9 +802,8 @@ set_click(Display *dpy, int percent)
 static void
 set_bell_vol(Display *dpy, int percent)
 {
-    XKeyboardControl values;
+    XKeyboardControl values = { .bell_percent = percent };
 
-    values.bell_percent = percent;
     if (percent == DEFAULT_ON)
 	values.bell_percent = SERVER_DEFAULT;
     XChangeKeyboardControl(dpy, KBBellPercent, &values);
@@ -822,9 +822,8 @@ set_bell_vol(Display *dpy, int percent)
 static void
 set_bell_pitch(Display *dpy, int pitch)
 {
-    XKeyboardControl values;
+    XKeyboardControl values = { .bell_pitch = pitch };
 
-    values.bell_pitch = pitch;
     XChangeKeyboardControl(dpy, KBBellPitch, &values);
     return;
 }
@@ -832,9 +831,8 @@ set_bell_pitch(Display *dpy, int pitch)
 static void
 set_bell_dur(Display *dpy, int duration)
 {
-    XKeyboardControl values;
+    XKeyboardControl values = { .bell_duration = duration };
 
-    values.bell_duration = duration;
     XChangeKeyboardControl(dpy, KBBellDuration, &values);
     return;
 }
@@ -996,9 +994,8 @@ set_font_path(Display *dpy, const char *path, int special, int before, int after
 static void
 set_led(Display *dpy, int led, int led_mode)
 {
-    XKeyboardControl values;
+    XKeyboardControl values = { .led_mode = led_mode };
 
-    values.led_mode = led_mode;
     if (led != ALL) {
 	values.led = led;
 	XChangeKeyboardControl(dpy, KBLed | KBLedMode, &values);
@@ -1091,9 +1088,8 @@ set_saver(Display *dpy, int mask, int value)
 static void
 set_repeat(Display *dpy, int key, int auto_repeat_mode)
 {
-    XKeyboardControl values;
+    XKeyboardControl values = { .auto_repeat_mode = auto_repeat_mode };
 
-    values.auto_repeat_mode = auto_repeat_mode;
     if (key != ALL) {
 	values.key = key;
 	XChangeKeyboardControl(dpy, KBKey | KBAutoRepeatMode, &values);
@@ -1226,13 +1222,13 @@ set_lock(Display *dpy, Bool onoff)
 static Status
 set_font_cache(Display *dpy, long himark, long lowmark, long balance)
 {
-    FontCacheSettings cs;
-    Status status;
+    FontCacheSettings cs = {
+	.himark = himark * 1024,
+	.lowmark = lowmark * 1024,
+	.balance = balance
+    };
 
-    cs.himark = himark * 1024;
-    cs.lowmark = lowmark * 1024;
-    cs.balance = balance;
-    status = FontCacheChangeCacheSettings(dpy, &cs);
+    Status status = FontCacheChangeCacheSettings(dpy, &cs);
 
     return status;
 }
