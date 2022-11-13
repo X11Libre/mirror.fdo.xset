@@ -986,8 +986,7 @@ set_font_path(Display *dpy, const char *path, int special, int before, int after
     }
 
     free(directories);
-    if (directoryList)
-	free(directoryList);
+    free(directoryList);
     if (currentList)
 	XFreeFontPath(currentList);
 
