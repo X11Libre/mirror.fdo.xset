@@ -130,8 +130,8 @@ static void xkbset_led(Display *dpy, const char *led, int led_mode);
 static void set_mouse(Display *dpy, int acc_num, int acc_denom, int threshold);
 static void set_saver(Display *dpy, int mask, int value);
 static void set_repeat(Display *dpy, int key, int auto_repeat_mode);
-static void set_pixels(Display *dpy, unsigned long *pixels, caddr_t *colors,
-		       int numpixels);
+static void set_pixels(Display *dpy, const unsigned long *pixels,
+                       caddr_t *colors, int numpixels);
 static void set_lock(Display *dpy, Bool onoff);
 static const char *on_or_off(int val, int onval, const char *onstr,
                              int offval, const char *offstr,
@@ -1134,7 +1134,7 @@ xkbset_repeatrate(Display *dpy, int delay, int interval)
 #endif
 
 static void
-set_pixels(Display *dpy, unsigned long *pixels, caddr_t * colors,
+set_pixels(Display *dpy, const unsigned long *pixels, caddr_t * colors,
     int numpixels)
 {
     XColor def;
