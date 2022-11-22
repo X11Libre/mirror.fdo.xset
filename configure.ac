@@ -58,8 +58,8 @@ PKG_CHECK_MODULES(SET_XKB, x11,
 	AC_CHECK_HEADERS([X11/XKBlib.h],,,[#include <X11/Xlib.h>])
 	CPPFLAGS="$SAVE_CPPFLAGS"],[echo "not found"])
 
-AC_ARG_WITH(xf86misc, AS_HELP_STRING([--without-xf86misc],[Disable xf86misc support.]),
-                [USE_XF86MISC="$withval"], [USE_XF86MISC="yes"])
+AC_ARG_WITH(xf86misc, AS_HELP_STRING([--with-xf86misc],[Enable xf86misc support.]),
+                [USE_XF86MISC="$withval"], [USE_XF86MISC="no"])
 if test "x$USE_XF86MISC" != "xno" ; then
 	PKG_CHECK_MODULES(SET_XF86MISC, xxf86misc,
 		[SAVE_CPPFLAGS="$CPPFLAGS"
