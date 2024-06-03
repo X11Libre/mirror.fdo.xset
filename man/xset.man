@@ -50,12 +50,10 @@ xset - user preference utility for X
 This program is used to set or query various user preference options
 of the display.
 .SH OPTIONS
-.PP
 .TP 8
 .B \-display \fIdisplay\fP
 This option specifies the server to use; see
 .BR X (__miscmansuffix__).
-.PP
 .TP 8
 .B b
 The \fBb\fP option controls bell volume, pitch and duration.
@@ -71,13 +69,12 @@ and the third numerical parameter specifies the duration in milliseconds.
 Note that not all hardware can vary the bell characteristics.
 The X server will set the characteristics of the bell as closely as it can
 to the user's specifications.
-.PP
 .TP 8
 .B bc
 The \fBbc\fP option controls \fIbug compatibility\fP mode in the server,
 if possible;
 a preceding dash(\-) disables the mode, otherwise the mode is enabled.
-Various pre-R4 clients pass illegal values in some protocol requests,
+Various pre-R4 clients pass invalid values in some protocol requests,
 and pre-R4 servers did not correctly generate errors in these cases.
 Such clients, when run against an R4 server,
 will terminate abnormally or otherwise fail to operate correctly.
@@ -99,7 +96,6 @@ If a value from 0 to 100 is given,
 it is used to indicate volume, as a percentage of the maximum.
 The X server will set
 the volume to the nearest value that the hardware can support.
-.PP
 .TP 8
 .B \-dpms
 The \fB\-dpms\fP option disables
@@ -142,18 +138,15 @@ The \fBrehash\fP argument resets the font path to its current value,
 causing the server to reread the font databases in the current font path.
 This is generally only used when adding new fonts to a font directory
 (after running \fImkfontdir\fP to recreate the font database).
-.PP
 .TP 8
 .B "\-fp \fRor\fP fp\-"
 The \fB\-fp\fP and \fBfp\-\fP options remove elements from the current font path.
 They must be followed by a comma-separated list of entries.
-.PP
 .TP 8
-.B "\+fp \fRor\fP fp\+"
-This \fB\+fp\fP and \fBfp\+\fP options prepend and append elements to the
+.B "+fp \fRor\fP fp+"
+The \fB+fp\fP and \fBfp+\fP options prepend and append elements to the
 current font path, respectively.
 They must be followed by a comma-separated list of entries.
-.PP
 .TP 8
 .B led
 The \fBled\fP option controls the keyboard LEDs.
@@ -173,7 +166,6 @@ and the indicator name.
 For example, to turn on the Scroll Lock LED:
 .IP
 xset led named "Scroll Lock"
-.PP
 .TP 8
 .B mouse
 The \fBmouse\fP option controls the mouse parameters;
@@ -219,7 +211,6 @@ so the above description may not apply to non-default cases.
 In the X.Org Server 1.7,
 these are available as input device properties (see
 .BR xinput (1).
-.PP
 .TP 8
 .B p
 The \fBp\fP option controls pixel color values.
@@ -231,7 +222,6 @@ Although these are often 0 and 1, they need not be.
 Also, a server may choose to allocate those colors privately,
 in which case an error will be generated.
 The map entry must not be a read-only color, or an error will result.
-.PP
 .TP 8
 .B r
 The \fBr\fP option controls the autorepeat.
@@ -254,7 +244,6 @@ the \fIdelay\fP is the number of milliseconds before autorepeat starts,
 and the \fIrate\fP is the number of repeats per second.
 If the \fIrate\fP or \fIdelay\fP is not given,
 it will be set to the default value.
-.PP
 .TP 8
 .B s
 The \fBs\fP option lets you set the screen saver parameters.
@@ -283,11 +272,9 @@ determines how long the server must be inactive for screen saving to activate,
 and the period to change the background pattern to avoid burn in.
 The arguments are specified in seconds.
 If only one numerical parameter is given, it will be used for the \fIlength\fP.
-.PP
 .TP 8
 .B q
 The \fBq\fP option gives you information on the current settings.
-.PP
 .TP 8
 .B \-version
 The \fB\-version\fP option prints the program version and exits without
@@ -311,4 +298,4 @@ David Krikorian, MIT Project Athena (X11 version)
 .br
 XFree86-Misc support added by David Dawes and Joe Moss
 .br
-Manpage updates added by Mike A. Harris <mharris@redhat.com>
+Manpage updates added by Mike A.\& Harris <mharris@redhat.com>
