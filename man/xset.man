@@ -22,7 +22,7 @@
 .\" other dealings in this Software without prior written authorization
 .\" from The Open Group.
 .\"
-.TH XSET 1 __xorgversion__
+.TH XSET 1 2025-04-12 __xorgversion__
 .SH NAME
 xset - user preference utility for X
 .SH SYNOPSIS
@@ -140,7 +140,8 @@ This is generally only used when adding new fonts to a font directory
 (after running \fImkfontdir\fP to recreate the font database).
 .TP 8
 .B "\-fp \fRor\fP fp\-"
-The \fB\-fp\fP and \fBfp\-\fP options remove elements from the current font path.
+The \fB\-fp\fP and \fBfp\-\fP options remove elements from
+the current font path.
 They must be followed by a comma-separated list of entries.
 .TP 8
 .B "+fp \fRor\fP fp+"
@@ -233,7 +234,7 @@ but only if it makes sense for the particular keycode.
 Keycodes below 8 are not typically valid for this command.
 Example: "\fBxset\ \-r\ 10\fP"
 will disable autorepeat for the "1" key on the top row of an IBM PC keyboard.
-
+.IP
 If the server supports the XFree86-Misc extension, or the XKB extension,
 then a parameter of \fBrate\fP is accepted
 and should be followed by zero, one, or two numeric values.
