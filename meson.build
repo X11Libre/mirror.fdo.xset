@@ -25,7 +25,7 @@
 project(
   'xset',
   'c',
-  version: '1.2.5',
+  version: '1.2.6',
   license: 'MIT-open-group',
   license_files: 'COPYING',
   meson_version: '>= 1.1.0',
